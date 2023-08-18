@@ -1,9 +1,11 @@
 import pandas as pd
 
-df1 = pd.read_csv('plik1.csv')
+content_a = pd.read_csv('Translation.csv')
+content_b = pd.read_csv('plik1.csv')
 
-df2 = pd.read_csv('plik2.csv')
+df = pd.concat([content_a, content_b])
+df = df.applymap(lambda x: x.replace('"', '') if isinstance(x, str) else x)
 
-df = df1.merge(df2, how='outer')
-df_no_duplicates = df.drop_duplicates()
-df_no_duplicates.to_csv('plik_merge.csv')
+df.drop_duplicates(subset=['language','source_text'], inplace=True)
+
+df.to_csv('plik_merge.csv', index=False)
